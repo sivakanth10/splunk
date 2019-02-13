@@ -1,4 +1,5 @@
-- hosts: Splunk_Server_Name
+---
+- hosts: "{{ Splunk_Server_Name }}"
   connection: local
   become: yes
   become_method: sudo
