@@ -1,4 +1,19 @@
 ---
+- name: Check if Splunk is already installed
+  yum: name=splunk state=present
+  register: splunk_installed_result
+  ignore_errors: yes
+
+- name: Check if Splunk is running
+  shell: /opt/splunk/bin/splunk status
+  register: splunk_running
+  ignore_errors: yes
+
+- name: Stop splunk service
+  shell: /opt/splunk/bin/splunk stop
+  register: splunk_stop
+  ignore_errors: yes
+  
 - name: uploading splunk installation package
   copy: src="{{ splunk_file_path }}/{{ splunk_package_file }}"
         dest= "{{ splunk_installation_temp_path }}/{{ splunk_package_file }}"
@@ -27,8 +42,8 @@
   
 - name: Set auto start after every boot
   shell: /opt/splunk/bin/splunk enable boot-start
-
 - name: Clean up splunk installation package RPM file
+
   shell: rm -rf /"{{ splunk_installation_temp_path }}/{{ splunk_package_file }}"
   when: splunk_installer_present.stat.exists == true
 
