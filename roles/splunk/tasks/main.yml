@@ -1,39 +1,36 @@
 ---
-- name: Check if splunk is already installed
-  yum: name=splunk state=present
-  register: splunk_installed_result
-  ignore_errors: yes
+#- name: Check if splunk is already installed
+#  yum: name=splunk state=present
+#  register: splunk_installed_result
+#  ignore_errors: yes
 
-- name: Check if Splunk is running
-  shell: /opt/splunk/bin/splunk status
-  register: splunk_running
-  ignore_errors: yes
+#- name: Check if Splunk is running
+#  shell: /opt/splunk/bin/splunk status
+#  register: splunk_running
+#  ignore_errors: yes
 
-- name: Stop splunk service
-  shell: /opt/splunk/bin/splunk stop
-  register: splunk_stop
-  ignore_errors: yes
+#- name: Stop splunk service
+#  shell: /opt/splunk/bin/splunk stop
+#  register: splunk_stop
+#  ignore_errors: yes
   
-- name: Curl the package
-  get_url:
-    url:"{{ splunk_package_file_name }}"
-    dest:"{{ splunk_installation_temp_path }}/{{ splunk_version_name }}"
-    mode="0755" 
+#- name: Curl the package
+#  get_url:
+#    url: "{{ splunk_package_file_name }}"
+#    dest: "{{ splunk_installation_temp_path }}"
+#    mode: "0755" 
   
 # commented this task 
-#- name: uploading splunk installation package
-#  copy: src="{{ splunk_file_path }}/{{ splunk_package_file_name }}"
-#        dest= "{{ splunk_installation_temp_path }}/{{ splunk_package_file_name }}"
+# name: uploading splunk installation package
+# copy: src="{{ splunk_file_path }}/{{ splunk_package_file_name }}"
+#        dest= "{{ splunk_installation_temp_path }}/{{ splunk_version_name }}"
         
 - name: Check that Splunk installer binary exists
-  state: path="{{ splunk_installation_temp_path }}/{{ splunk_package_file_name }}"
+  stat: path="{{ splunk_installation_temp_path }}/{{ splunk_version_name }}"
   register: splunk_installer_present
 
 - name: Install Splunk server package
-  tags:
-   - install
-  yum: pkg="{{ splunk_installation_temp_path }}/{{ splunk_package_file_name }}" state=installed
-  when: splunk_installer_present.stat.exists == true
+  yum: pkg="{{ splunk_installation_temp_path }}/{{ splunk_version_name }}" state=installed
 
 - name: Starting splunk service
   shell: /opt/splunk/bin/splunk start --accept-license --answer-yes
@@ -44,6 +41,6 @@
   shell: /opt/splunk/bin/splunk enable boot-start
 - name: Clean up splunk installation package RPM file
 
-  shell: rm -rf /"{{ splunk_installation_temp_path }}/{{ splunk_package_file }}"
+  shell: rm -rf /"{{ splunk_installation_temp_path }}/{{ splunk_version_name }}"
   when: splunk_installer_present.stat.exists == true
 
