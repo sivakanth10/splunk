@@ -1,5 +1,5 @@
 ---
-- name: Check if Splunk is already installed
+- name: Check if splunk is already installed
   yum: name=splunk state=present
   register: splunk_installed_result
   ignore_errors: yes
@@ -14,28 +14,28 @@
   register: splunk_stop
   ignore_errors: yes
   
-- name: uploading splunk installation package
-  copy: src="{{ splunk_file_path }}/{{ splunk_package_file }}"
-        dest= "{{ splunk_installation_temp_path }}/{{ splunk_package_file }}"
+- name: Curl the package
+  get_url:
+    url:"{{ splunk_package_file_name }}"
+    dest:"{{ splunk_installation_temp_path }}/{{ splunk_version_name }}"
+    mode="0755" 
+  
+# commented this task 
+#- name: uploading splunk installation package
+#  copy: src="{{ splunk_file_path }}/{{ splunk_package_file_name }}"
+#        dest= "{{ splunk_installation_temp_path }}/{{ splunk_package_file_name }}"
         
-# un comment this task as per requirement
-#- name: Curl the package
-#  get_url:
-#    url:splunk_package_name.rpm
-#     dest:/local/lfs2/opt/ (or)  "{{ splunk_installation_temp_path }}/{{ splunk_package_file }}"
-#     mode="0755"
-
 - name: Check that Splunk installer binary exists
-  state: path="{{ splunk_installation_temp_path }}/{{ splunk_package_file }}"
+  state: path="{{ splunk_installation_temp_path }}/{{ splunk_package_file_name }}"
   register: splunk_installer_present
 
 - name: Install Splunk server package
   tags:
    - install
-  yum: pkg="{{ splunk_installation_temp_path }}/{{ splunk_package_file }}" state=installed
+  yum: pkg="{{ splunk_installation_temp_path }}/{{ splunk_package_file_name }}" state=installed
   when: splunk_installer_present.stat.exists == true
 
-- name: Start splunk service
+- name: Starting splunk service
   shell: /opt/splunk/bin/splunk start --accept-license --answer-yes
   register: splunk_start
   ignore_errors: yes
