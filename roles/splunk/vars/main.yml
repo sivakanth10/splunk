@@ -1,0 +1,3 @@
+#splunk_file_path: 
+splunk_package_file: https://download.splunk.com/products/splunk/releases/7.0.2/linux/splunk-7.0.2-03bbabbd5c0f-linux-2.6-x86_64.rpm
+splunk_installation_temp_path: /opt/splunk/tmp
