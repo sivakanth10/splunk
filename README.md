@@ -1,3 +1,8 @@
+This repo consists of Ansible playbooks to install splunk server and universal forwarder.
+
+Download the latest rpm files from splunk and place them in the files directory and update the vars in vars/main.yml.
+
+
 Splunk download Links
 =============================================================
 
