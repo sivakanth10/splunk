@@ -1,6 +1,6 @@
-This repo consists of Ansible playbooks to install splunk server
+This repo consists of Ansible Role/playbooks to install splunk server
 
-Download the latest rpm files from splunk and place them in the files directory and update the vars in vars/main.yml.
+Download the latest rpm files/url links from splunk and place them in the files directory and update the vars in vars/main.yml.
 
 
 Splunk download Links
